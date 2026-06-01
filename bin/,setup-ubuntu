@@ -152,10 +152,14 @@ echo Unknown packages:
 comm -13 /tmp/existing-packages /tmp/desired-packages | xargs echo
 echo
 
+echo ======== Installing missing desired packages
+
 sudo apt-get install --ignore-missing -y $(
     comm -12 /tmp/existing-packages /tmp/desired-packages)
 
 # Remove various annoying or unnecessary packages.
+
+echo ======== Computing doomed packages
 
 doomed_packages="
   command-not-found python3-commandnotfound
@@ -168,10 +172,10 @@ doomed_packages="
   ubuntu-advantage-desktop-daemon
   unattended-upgrades
 "
-doomed_packages="$(comm -12 \
-     <(echo $doomed_packages | tr ' ' '\n' | grep . | sort) \
-     <(dpkg-query --show --showformat='${Package}\n') \
-)"
+echo $doomed_packages | tr ' ' '\n' | grep . | sort > ~/.cache/packages.doomed
+dpkg-query --show --showformat='${Package}\n' | sort > ~/.cache/packages.all
+
+doomed_packages="$(comm -12 ~/.cache/packages.doomed ~/.cache/packages.all)"
 if [ -n "$doomed_packages" ]
 then
     sudo apt purge $(echo $doomed_packages)
@@ -326,7 +330,7 @@ sudo systemctl enable dictd
 # my `,downloads` shell script does not work.
 
 if dpkg -s coreutils-from-uutils >/dev/null 2>&1; then
-    apt remove coreutils-from-uutils --allow-remove-essential
+    sudo apt remove coreutils-from-uutils --allow-remove-essential
 fi
 
 # Remove dangling config files of uninstalled packages.  Note that this
