@@ -217,6 +217,7 @@ AddToMenu Clipboard "Type clipboard" Exec exec ,type-clipboard
 
 DestroyMenu Emoji
 AddToMenu Emoji "Emoji" Title
++ "&c. Crossed fingers" Exec exec xdotool type --delay 30 '🤞'
 + "&e. Embarrassed" Exec exec xdotool type --delay 30 '😳'
 + "&f. Frown" Exec exec xdotool type --delay 30 '🫤'
 + "&h. Heart" Exec exec xdotool type --delay 30 '❤️'
