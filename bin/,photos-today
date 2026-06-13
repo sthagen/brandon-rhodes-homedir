@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import datetime as dt
+import webbrowser
+
+today = dt.date.today()
+u = today.strftime('https://photos.google.com/search/%d%%2F%m')
+webbrowser.open(u)
